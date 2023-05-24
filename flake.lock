@@ -1,7 +1,25 @@
 {
   "nodes": {
+    "flyctl-0-1-12": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1684893256,
+        "narHash": "sha256-zAGnFkd8VM6VjIayOIYXCq24AMDJKJZ6xYGfwrfA/Jo=",
+        "owner": "superfly",
+        "repo": "flyctl",
+        "rev": "b0911e043fbfb315d5a924d7f3ad4ed673967a22",
+        "type": "github"
+      },
+      "original": {
+        "owner": "superfly",
+        "ref": "v0.1.12",
+        "repo": "flyctl",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
+        "flyctl-0-1-12": "flyctl-0-1-12",
         "stable": "stable",
         "unstable": "unstable"
       }
