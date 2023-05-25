@@ -32,6 +32,15 @@
       src = ./testapp;
       vendorHash = null;
     };
+
+    testapp-cgo = pkgs-unstable.buildGoModule {
+      name = "testapp";
+      version = "0.0.1";
+      src = ./testapp;
+      vendorHash = null;
+      CGO_ENABLED=1;
+      tags = ["enablecgo"];
+    };
   in {
     apps.x86_64-linux.stable = {program = "${pkgs-stable.flyctl}/bin/flyctl"; type = "app";};
     apps.x86_64-linux.unstable = { program = "${pkgs-unstable.flyctl}/bin/flyctl"; type = "app";};
@@ -42,5 +51,6 @@
     apps.x86_64-linux.userenv-latest = { program = "${(userenv {flyctl = patched-flyctl; pkgs = pkgs-unstable;})}/bin/run-flyctl"; type = "app";};
 
     apps.x86_64-linux.testapp = {program = "${testapp}/bin/testapp"; type= "app";};
+    apps.x86_64-linux.testapp-cgo = {program = "${testapp-cgo}/bin/testapp"; type= "app";};
  };
 }
