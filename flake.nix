@@ -41,6 +41,22 @@
       CGO_ENABLED=1;
       tags = ["enablecgo"];
     };
+
+    testapp-go19 = pkgs-unstable.buildGo119Module {
+      name = "testapp";
+      version = "0.0.1";
+      src = ./testapp-go19;
+      vendorHash = null;
+    };
+
+    testapp-cgo19 = pkgs-unstable.buildGo119Module {
+      name = "testapp";
+      version = "0.0.1";
+      src = ./testapp-go19;
+      vendorHash = null;
+      CGO_ENABLED=1;
+      tags = ["enablecgo"];
+    };
   in {
     apps.x86_64-linux.stable = {program = "${pkgs-stable.flyctl}/bin/flyctl"; type = "app";};
     apps.x86_64-linux.unstable = { program = "${pkgs-unstable.flyctl}/bin/flyctl"; type = "app";};
@@ -52,5 +68,7 @@
 
     apps.x86_64-linux.testapp = {program = "${testapp}/bin/testapp"; type= "app";};
     apps.x86_64-linux.testapp-cgo = {program = "${testapp-cgo}/bin/testapp"; type= "app";};
+    apps.x86_64-linux.testapp-go19 = {program = "${testapp-go19}/bin/testapp"; type= "app";};
+    apps.x86_64-linux.testapp-cgo19 = {program = "${testapp-cgo19}/bin/testapp"; type= "app";};
  };
 }
