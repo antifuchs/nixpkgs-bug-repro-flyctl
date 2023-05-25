@@ -26,37 +26,40 @@
       '';
     };
 
-    testapp = pkgs-unstable.buildGoModule {
-      name = "testapp";
-      version = "0.0.1";
-      src = ./testapp;
-      vendorHash = null;
+    testapp = pkgs: {
+      go = pkgs {
+        name = "testapp";
+        version = "0.0.1";
+        src = ./testapp;
+        vendorHash = null;
+      };
+
+      cgo = pkgs.buildGoModule {
+        name = "testapp";
+        version = "0.0.1";
+        src = ./testapp;
+        vendorHash = null;
+        CGO_ENABLED=1;
+        tags = ["enablecgo"];
+      };
+
+      go19 = pkgs.buildGo119Module {
+        name = "testapp";
+        version = "0.0.1";
+        src = ./testapp-go19;
+        vendorHash = null;
+      };
+
+      cgo19 = pkgs.buildGo119Module {
+        name = "testapp";
+        version = "0.0.1";
+        src = ./testapp-go19;
+        vendorHash = null;
+        CGO_ENABLED=1;
+        tags = ["enablecgo"];
+      };
     };
 
-    testapp-cgo = pkgs-unstable.buildGoModule {
-      name = "testapp";
-      version = "0.0.1";
-      src = ./testapp;
-      vendorHash = null;
-      CGO_ENABLED=1;
-      tags = ["enablecgo"];
-    };
-
-    testapp-go19 = pkgs-unstable.buildGo119Module {
-      name = "testapp";
-      version = "0.0.1";
-      src = ./testapp-go19;
-      vendorHash = null;
-    };
-
-    testapp-cgo19 = pkgs-unstable.buildGo119Module {
-      name = "testapp";
-      version = "0.0.1";
-      src = ./testapp-go19;
-      vendorHash = null;
-      CGO_ENABLED=1;
-      tags = ["enablecgo"];
-    };
   in {
     apps.x86_64-linux.stable = {program = "${pkgs-stable.flyctl}/bin/flyctl"; type = "app";};
     apps.x86_64-linux.unstable = { program = "${pkgs-unstable.flyctl}/bin/flyctl"; type = "app";};
@@ -66,9 +69,14 @@
     apps.x86_64-linux.userenv-unstable = { program = "${(userenv {pkgs = pkgs-unstable; flyctl = pkgs-unstable.flyctl;})}/bin/run-flyctl"; type = "app";};
     apps.x86_64-linux.userenv-latest = { program = "${(userenv {flyctl = patched-flyctl; pkgs = pkgs-unstable;})}/bin/run-flyctl"; type = "app";};
 
-    apps.x86_64-linux.testapp = {program = "${testapp}/bin/testapp"; type= "app";};
-    apps.x86_64-linux.testapp-cgo = {program = "${testapp-cgo}/bin/testapp"; type= "app";};
-    apps.x86_64-linux.testapp-go19 = {program = "${testapp-go19}/bin/testapp"; type= "app";};
-    apps.x86_64-linux.testapp-cgo19 = {program = "${testapp-cgo19}/bin/testapp"; type= "app";};
+    apps.x86_64-linux.testapp = {program = "${(testapp pkgs-unstable).go}/bin/testapp"; type= "app";};
+    apps.x86_64-linux.testapp-cgo = {program = "${(testapp pkgs-unstable).cgo}/bin/testapp"; type= "app";};
+    apps.x86_64-linux.testapp-go19 = {program = "${(testapp pkgs-unstable).go19}/bin/testapp"; type= "app";};
+    apps.x86_64-linux.testapp-cgo19 = {program = "${(testapp pkgs-unstable).cgo19}/bin/testapp"; type= "app";};
+
+    apps.x86_64-linux.stable-testapp = {program = "${(testapp pkgs-stable).go}/bin/testapp"; type= "app";};
+    apps.x86_64-linux.stable-testapp-cgo = {program = "${(testapp pkgs-stable).cgo}/bin/testapp"; type= "app";};
+    apps.x86_64-linux.stable-testapp-go19 = {program = "${(testapp pkgs-stable).go19}/bin/testapp"; type= "app";};
+    apps.x86_64-linux.stable-testapp-cgo19 = {program = "${(testapp pkgs-stable).cgo19}/bin/testapp"; type= "app";};
  };
 }
