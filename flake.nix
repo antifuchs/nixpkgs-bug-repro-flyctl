@@ -60,6 +60,13 @@
       };
     };
 
+    diagnostics = pkgs-stable.writeShellScript "diagnostics" ''
+      set -x
+      ulimit -a
+      export
+      readlink /proc/$$/task/*/ns/* | sort -u
+    '';
+
   in {
     apps.x86_64-linux.stable = {program = "${pkgs-stable.flyctl}/bin/flyctl"; type = "app";};
     apps.x86_64-linux.unstable = { program = "${pkgs-unstable.flyctl}/bin/flyctl"; type = "app";};
@@ -78,5 +85,7 @@
     apps.x86_64-linux.stable-testapp-cgo = {program = "${(testapp pkgs-stable).cgo}/bin/testapp"; type= "app";};
     apps.x86_64-linux.stable-testapp-go19 = {program = "${(testapp pkgs-stable).go19}/bin/testapp"; type= "app";};
     apps.x86_64-linux.stable-testapp-cgo19 = {program = "${(testapp pkgs-stable).cgo19}/bin/testapp"; type= "app";};
+
+    apps.x86_64-linux.diagnostics = {program = "${diagnostics}"; type="app";};
  };
 }
